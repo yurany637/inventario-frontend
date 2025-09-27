@@ -70,7 +70,7 @@ export default {
     async guardarProducto() {
       try {
         if (this.editando) {
-          // ✅ CORREGIDO: Template string bien formado
+          // ✅ CORREGIDO: Template string bien formado con backticks
           await axios.put(`https://inventarioapp-yhie.onrender.com/api/productos/${this.producto.id}`, {
             nombre: this.producto.nombre,
             cantidad: this.producto.cantidad
@@ -127,7 +127,87 @@ export default {
 };
 </script>
 
-<!-- Mantén los mismos estilos CSS -->
 <style scoped>
-/* Tu CSS actual está bien */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.btn-editar {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn-eliminar {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn-editar:hover {
+  background-color: #0056b3;
+}
+
+.btn-eliminar:hover {
+  background-color: #c82333;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+input {
+  margin: 5px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 200px;
+}
+
+button[type="submit"] {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type="button"] {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+button[type="button"]:hover {
+  background-color: #5a6268;
+}
 </style>
