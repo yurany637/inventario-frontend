@@ -1,7 +1,5 @@
-import { createApp } from 'vue';
-import App from './App.vue';
-import router from './router'; // Importa el archivo de rutas
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router.js'
 
-const app = createApp(App);
-app.use(router); // Usa el router
-app.mount('#app');
+createApp(App).use(router).mount('#app')

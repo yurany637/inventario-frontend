@@ -1,23 +1,48 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import Login from './components/Login.vue';
-import Dashboard from './components/Dashboard.vue';
-import Productos from './components/Productos.vue';
-import Clientes from './components/Clientes.vue';
-import Proveedores from './components/Proveedores.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+import LoginView from './components/Login.vue'
+import DashboardView from './components/Dashboard.vue'
+import ProductosView from './components/Productos.vue'
+import ClientesView from './components/Clientes.vue'
+import ProveedoresView from './components/Proveedores.vue'
 
 const routes = [
-  { path: '/', redirect: '/login' },
-  { path: '/login', component: Login },
-  { path: '/dashboard', component: Dashboard, children: [
-    { path: '/productos', component: Productos },
-    { path: '/clientes', component: Clientes },
-    { path: '/proveedores', component: Proveedores }
-  ]}
-];
+  {
+    path: '/',
+    redirect: '/login'
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginView
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: DashboardView,
+    children: [
+      {
+        path: '',
+        redirect: '/dashboard/productos'
+      },
+      {
+        path: 'productos',
+        component: ProductosView
+      },
+      {
+        path: 'clientes',
+        component: ClientesView
+      },
+      {
+        path: 'proveedores',
+        component: ProveedoresView
+      }
+    ]
+  }
+]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
-});
+})
 
-export default router;
+export default router

@@ -4,9 +4,10 @@
       <h2>Inventario App</h2>
       <nav>
         <ul>
-          <li><router-link to="/productos">Productos</router-link></li>
-          <li><router-link to="/clientes">Clientes</router-link></li>
-          <li><router-link to="/proveedores">Proveedores</router-link></li>
+          <li><router-link to="/dashboard/productos">Productos</router-link></li>
+          <li><router-link to="/dashboard/clientes">Clientes</router-link></li>
+          <li><router-link to="/dashboard/proveedores">Proveedores</router-link></li>
+          <li><button @click="logout" class="logout-btn">Cerrar Sesión</button></li>
         </ul>
       </nav>
     </aside>
@@ -18,7 +19,12 @@
 
 <script>
 export default {
-  name: 'DashboardView' // ← SOLO ESTA LÍNEA CAMBIÓ
+  name: 'DashboardView',
+  methods: {
+    logout() {
+      this.$router.push('/login');
+    }
+  }
 };
 </script>
 
@@ -48,6 +54,32 @@ export default {
   color: #fff;
   text-decoration: none;
   font-size: 1.2em;
+  display: block;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.router-link-active {
+  background-color: #34495e;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #e74c3c;
 }
 
 .content {
