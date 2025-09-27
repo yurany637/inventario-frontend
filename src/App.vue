@@ -1,15 +1,23 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <header>
+      <h1>Sistema de Inventario</h1>
+      <p>Frontend Vue.js conectado con Backend Spring Boot</p>
+    </header>
+    
+    <main>
+      <ProductList />
+    </main>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ProductList from './components/ProductList.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    ProductList
   }
 }
 </script>
@@ -19,8 +27,21 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+header {
+  background: #42b983;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+header h1 {
+  margin: 0;
+}
+
+main {
+  padding: 20px;
 }
 </style>
