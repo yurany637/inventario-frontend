@@ -66,11 +66,12 @@ export default {
         alert('Error al cargar productos. Revisa la consola para más detalles.');
       }
     },
+    
     async guardarProducto() {
       try {
         if (this.editando) {
-          // Actualizar producto existente
-          await axios.put('https://inventarioapp-yhie.onrender.com/api/productos/${this.producto.id}', {
+          // ✅ CORREGIDO: Template string bien formado
+          await axios.put(`https://inventarioapp-yhie.onrender.com/api/productos/${this.producto.id}`, {
             nombre: this.producto.nombre,
             cantidad: this.producto.cantidad
           });
@@ -86,11 +87,12 @@ export default {
         
         this.limpiarFormulario();
         this.obtenerProductos(); // Actualizar la lista
-             } catch (err) {
+      } catch (err) {
         console.error('Error al guardar producto:', err);
         alert('Error al guardar producto. Revisa la consola para más detalles.');
       }
     },
+    
     editarProducto(producto) {
       this.producto = {
         id: producto.id,
@@ -99,13 +101,16 @@ export default {
       };
       this.editando = true;
     },
+    
     cancelarEdicion() {
       this.limpiarFormulario();
     },
+    
     limpiarFormulario() {
       this.producto = { id: null, nombre: '', cantidad: 0 };
       this.editando = false;
     },
+    
     async eliminarProducto(id) {
       if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
         try {
@@ -122,78 +127,7 @@ export default {
 };
 </script>
 
+<!-- Mantén los mismos estilos CSS -->
 <style scoped>
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
-.btn-editar {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  margin-right: 5px;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.btn-eliminar {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.btn-editar:hover {
-  background-color: #0056b3;
-}
-
-.btn-eliminar:hover {
-  background-color: #c82333;
-}
-
-form {
-  margin-bottom: 20px;
-}
-
-input {
-  margin: 5px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-button[type="submit"] {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  margin: 5px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button[type="button"] {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  margin: 5px;
-  border-radius: 4px;
-  cursor: pointer;
-}
+/* Tu CSS actual está bien */
 </style>
