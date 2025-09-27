@@ -70,7 +70,7 @@ export default {
       try {
         if (this.editando) {
           // Actualizar producto existente
-          await axios.put(`https://inventarioapp-yhie.onrender.com/api/productos/${this.producto.id}`, {
+          await axios.put('https://inventarioapp-yhie.onrender.com/api/productos/${this.producto.id}', {
             nombre: this.producto.nombre,
             cantidad: this.producto.cantidad
           });
@@ -86,11 +86,10 @@ export default {
         
         this.limpiarFormulario();
         this.obtenerProductos(); // Actualizar la lista
-        await axios.post('https://inventarioapp-yhie.onrender.com/api/productos', {
-      } catch (err) {
+             } catch (err) {
         console.error('Error al guardar producto:', err);
         alert('Error al guardar producto. Revisa la consola para más detalles.');
-      })
+      }
     },
     editarProducto(producto) {
       this.producto = {
