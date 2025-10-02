@@ -67,66 +67,72 @@ export default {
         this.clientes = response.data;
       } catch (err) {
         console.error('Error al obtener clientes:', err);
-        alert('Error al cargar clientes. Revisa la consola para más detalles.');
+        alert('Error al cargar clientes. Revisa la consola.');
       }
     },
-    
+
+    validarFormulario() {
+      const nombreRegex = /^[a-zA-Z\s]+$/;
+      const direccionRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\s]{5,}$/;
+      const contactoRegex = /^[0-9]{7,15}$/;
+
+      if (!this.cliente.nombre || !nombreRegex.test(this.cliente.nombre)) {
+        alert('El nombre solo debe contener letras.');
+        return false;
+      }
+      if (!this.cliente.direccion || !direccionRegex.test(this.cliente.direccion)) {
+        alert('La dirección debe tener al menos 5 caracteres e incluir letras y números.');
+        return false;
+      }
+      if (!this.cliente.contacto || !contactoRegex.test(this.cliente.contacto)) {
+        alert('El contacto debe contener entre 7 y 15 dígitos numéricos.');
+        return false;
+      }
+      return true;
+    },
+
     async guardarCliente() {
+      if (!this.validarFormulario()) return;
+
       try {
         if (this.editando) {
-          // Actualizar cliente existente
-          await axios.put(`https://inventarioapp-yhie.onrender.com/api/clientes/${this.cliente.id}`, {
-            nombre: this.cliente.nombre,
-            direccion: this.cliente.direccion,
-            contacto: this.cliente.contacto
-          });
+          await axios.put(`https://inventarioapp-yhie.onrender.com/api/clientes/${this.cliente.id}`, this.cliente);
           alert('Cliente actualizado correctamente');
         } else {
-          // Crear nuevo cliente
-          await axios.post('https://inventarioapp-yhie.onrender.com/api/clientes', {
-            nombre: this.cliente.nombre,
-            direccion: this.cliente.direccion,
-            contacto: this.cliente.contacto
-          });
+          await axios.post('https://inventarioapp-yhie.onrender.com/api/clientes', this.cliente);
           alert('Cliente creado correctamente');
         }
-        
         this.limpiarFormulario();
-        this.obtenerClientes(); // Actualizar la lista
+        this.obtenerClientes();
       } catch (err) {
         console.error('Error al guardar cliente:', err);
-        alert('Error al guardar cliente. Revisa la consola para más detalles.');
+        alert('Error al guardar cliente.');
       }
     },
-    
+
     editarCliente(cliente) {
-      this.cliente = {
-        id: cliente.id,
-        nombre: cliente.nombre,
-        direccion: cliente.direccion,
-        contacto: cliente.contacto
-      };
+      this.cliente = { ...cliente };
       this.editando = true;
     },
-    
+
     cancelarEdicion() {
       this.limpiarFormulario();
     },
-    
+
     limpiarFormulario() {
       this.cliente = { id: null, nombre: '', direccion: '', contacto: '' };
       this.editando = false;
     },
-    
+
     async eliminarCliente(id) {
       if (confirm('¿Estás seguro de que quieres eliminar este cliente?')) {
         try {
           await axios.delete(`https://inventarioapp-yhie.onrender.com/api/clientes/${id}`);
           alert('Cliente eliminado correctamente');
-          this.obtenerClientes(); // Actualizar la lista
+          this.obtenerClientes();
         } catch (err) {
           console.error('Error al eliminar cliente:', err);
-          alert('Error al eliminar cliente. Revisa la consola para más detalles.');
+          alert('Error al eliminar cliente.');
         }
       }
     }
@@ -140,17 +146,14 @@ table {
   border-collapse: collapse;
   margin-top: 20px;
 }
-
 th, td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
 }
-
 th {
   background-color: #f2f2f2;
 }
-
 .btn-editar {
   background-color: #007bff;
   color: white;
@@ -160,7 +163,6 @@ th {
   border-radius: 3px;
   cursor: pointer;
 }
-
 .btn-eliminar {
   background-color: #dc3545;
   color: white;
@@ -169,19 +171,15 @@ th {
   border-radius: 3px;
   cursor: pointer;
 }
-
 .btn-editar:hover {
   background-color: #0056b3;
 }
-
 .btn-eliminar:hover {
   background-color: #c82333;
 }
-
 form {
   margin-bottom: 20px;
 }
-
 input {
   margin: 5px;
   padding: 8px;
@@ -189,7 +187,6 @@ input {
   border-radius: 4px;
   width: 200px;
 }
-
 button[type="submit"] {
   background-color: #28a745;
   color: white;
@@ -199,7 +196,6 @@ button[type="submit"] {
   border-radius: 4px;
   cursor: pointer;
 }
-
 button[type="button"] {
   background-color: #6c757d;
   color: white;
@@ -209,11 +205,9 @@ button[type="button"] {
   border-radius: 4px;
   cursor: pointer;
 }
-
 button[type="submit"]:hover {
   background-color: #218838;
 }
-
 button[type="button"]:hover {
   background-color: #5a6268;
 }
