@@ -4,9 +4,33 @@
     
     <h3>{{ editando ? 'Actualizar' : 'Registrar Nuevo' }} Proveedor</h3>
     <form @submit.prevent="guardarProveedor">
-      <input type="text" v-model="proveedor.nombre" placeholder="Nombre del Proveedor" required>
-      <input type="text" v-model="proveedor.direccion" placeholder="Dirección" required>
-      <input type="text" v-model="proveedor.contacto" placeholder="Contacto" required>
+      <input 
+        type="text" 
+        v-model="proveedor.nombre" 
+        placeholder="Nombre del Proveedor" 
+        required
+      >
+
+      <!-- Dirección: mínimo 5 caracteres, debe contener letras y números -->
+      <input 
+        type="text" 
+        v-model="proveedor.direccion" 
+        placeholder="Dirección" 
+        required
+        pattern="^(?=.*[A-Za-z])(?=.*[0-9]).{5,}$" 
+        title="La dirección debe tener al menos 5 caracteres e incluir letras y números"
+      >
+
+      <!-- Contacto: solo números, 7 a 15 dígitos -->
+      <input 
+        type="text" 
+        v-model="proveedor.contacto" 
+        placeholder="Contacto (Teléfono)" 
+        required
+        pattern="^[0-9]{7,15}$" 
+        title="El contacto debe tener entre 7 y 15 dígitos numéricos"
+      >
+
       <button type="submit">{{ editando ? 'Actualizar' : 'Guardar' }} Proveedor</button>
       <button v-if="editando" type="button" @click="cancelarEdicion">Cancelar</button>
     </form>
@@ -135,6 +159,7 @@ export default {
 </script>
 
 <style scoped>
+/* --- mismo estilo --- */
 table {
   width: 100%;
   border-collapse: collapse;
