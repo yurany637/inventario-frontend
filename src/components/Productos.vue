@@ -4,8 +4,14 @@
     
     <h3>{{ editando ? 'Actualizar' : 'Registrar Nuevo' }} Producto</h3>
     <form @submit.prevent="guardarProducto">
+      <!-- Nombre -->
       <input type="text" v-model="producto.nombre" placeholder="Nombre del Producto" required>
+      <div v-if="errores.nombre" style="color:red; font-size:12px;">{{ errores.nombre }}</div>
+
+      <!-- Cantidad -->
       <input type="number" v-model="producto.cantidad" placeholder="Cantidad" required>
+      <div v-if="errores.cantidad" style="color:red; font-size:12px;">{{ errores.cantidad }}</div>
+
       <button type="submit">{{ editando ? 'Actualizar' : 'Guardar' }} Producto</button>
       <button v-if="editando" type="button" @click="cancelarEdicion">Cancelar</button>
     </form>
@@ -48,8 +54,9 @@ export default {
       producto: {
         id: null,
         nombre: '',
-        cantidad: 0
+        cantidad: ''
       },
+      errores: {}, // ✅ para manejar validaciones
       editando: false
     };
   },
@@ -67,17 +74,35 @@ export default {
       }
     },
     
+    validarFormulario() {
+      this.errores = {};
+
+      if (!this.producto.nombre) {
+        this.errores.nombre = 'El nombre no puede estar vacío';
+      }
+
+      if (this.producto.cantidad === '' || this.producto.cantidad === null) {
+        this.errores.cantidad = 'La cantidad no puede estar vacía';
+      } else if (isNaN(this.producto.cantidad) || this.producto.cantidad < 0) {
+        this.errores.cantidad = 'La cantidad debe ser un número válido';
+      }
+
+      return Object.keys(this.errores).length === 0;
+    },
+
     async guardarProducto() {
+      if (!this.validarFormulario()) {
+        return;
+      }
+
       try {
         if (this.editando) {
-          // ✅ CORREGIDO: Template string bien formado con backticks
           await axios.put(`https://inventarioapp-yhie.onrender.com/api/productos/${this.producto.id}`, {
             nombre: this.producto.nombre,
             cantidad: this.producto.cantidad
           });
           alert('Producto actualizado correctamente');
         } else {
-          // Crear nuevo producto
           await axios.post('https://inventarioapp-yhie.onrender.com/api/productos', {
             nombre: this.producto.nombre,
             cantidad: this.producto.cantidad
@@ -86,7 +111,7 @@ export default {
         }
         
         this.limpiarFormulario();
-        this.obtenerProductos(); // Actualizar la lista
+        this.obtenerProductos();
       } catch (err) {
         console.error('Error al guardar producto:', err);
         alert('Error al guardar producto. Revisa la consola para más detalles.');
@@ -107,7 +132,8 @@ export default {
     },
     
     limpiarFormulario() {
-      this.producto = { id: null, nombre: '', cantidad: 0 };
+      this.producto = { id: null, nombre: '', cantidad: '' };
+      this.errores = {};
       this.editando = false;
     },
     
@@ -116,7 +142,7 @@ export default {
         try {
           await axios.delete(`https://inventarioapp-yhie.onrender.com/api/productos/${id}`);
           alert('Producto eliminado correctamente');
-          this.obtenerProductos(); // Actualizar la lista
+          this.obtenerProductos();
         } catch (err) {
           console.error('Error al eliminar producto:', err);
           alert('Error al eliminar producto. Revisa la consola para más detalles.');
