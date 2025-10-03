@@ -4,9 +4,36 @@
     
     <h3>{{ editando ? 'Actualizar' : 'Registrar Nuevo' }} Cliente</h3>
     <form @submit.prevent="guardarCliente">
-      <input type="text" v-model="cliente.nombre" placeholder="Nombre del Cliente" required>
-      <input type="text" v-model="cliente.direccion" placeholder="Dirección" required>
-      <input type="text" v-model="cliente.contacto" placeholder="Contacto" required>
+      <!-- Nombre: solo letras -->
+      <input 
+        type="text" 
+        v-model="cliente.nombre" 
+        placeholder="Nombre del Cliente" 
+        required
+        pattern="^[a-zA-Z\s]+$" 
+        title="El nombre solo debe contener letras"
+      >
+
+      <!-- Dirección: mínimo 5 caracteres, debe contener letras y números -->
+      <input 
+        type="text" 
+        v-model="cliente.direccion" 
+        placeholder="Dirección" 
+        required
+        pattern="^(?=.*[A-Za-z])(?=.*[0-9]).{5,}$" 
+        title="La dirección debe tener al menos 5 caracteres e incluir letras y números"
+      >
+
+      <!-- Contacto: solo números, 7 a 15 dígitos -->
+      <input 
+        type="text" 
+        v-model="cliente.contacto" 
+        placeholder="Contacto (Teléfono)" 
+        required
+        pattern="^[0-9]{7,15}$" 
+        title="El contacto debe tener entre 7 y 15 dígitos numéricos"
+      >
+
       <button type="submit">{{ editando ? 'Actualizar' : 'Guardar' }} Cliente</button>
       <button v-if="editando" type="button" @click="cancelarEdicion">Cancelar</button>
     </form>
@@ -71,29 +98,7 @@ export default {
       }
     },
 
-    validarFormulario() {
-      const nombreRegex = /^[a-zA-Z\s]+$/;
-      const direccionRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\s]{5,}$/;
-      const contactoRegex = /^[0-9]{7,15}$/;
-
-      if (!this.cliente.nombre || !nombreRegex.test(this.cliente.nombre)) {
-        alert('El nombre solo debe contener letras.');
-        return false;
-      }
-      if (!this.cliente.direccion || !direccionRegex.test(this.cliente.direccion)) {
-        alert('La dirección debe tener al menos 5 caracteres e incluir letras y números.');
-        return false;
-      }
-      if (!this.cliente.contacto || !contactoRegex.test(this.cliente.contacto)) {
-        alert('El contacto debe contener entre 7 y 15 dígitos numéricos.');
-        return false;
-      }
-      return true;
-    },
-
     async guardarCliente() {
-      if (!this.validarFormulario()) return;
-
       try {
         if (this.editando) {
           await axios.put(`https://inventarioapp-yhie.onrender.com/api/clientes/${this.cliente.id}`, this.cliente);
@@ -139,76 +144,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-th {
-  background-color: #f2f2f2;
-}
-.btn-editar {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  margin-right: 5px;
-  border-radius: 3px;
-  cursor: pointer;
-}
-.btn-eliminar {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 3px;
-  cursor: pointer;
-}
-.btn-editar:hover {
-  background-color: #0056b3;
-}
-.btn-eliminar:hover {
-  background-color: #c82333;
-}
-form {
-  margin-bottom: 20px;
-}
-input {
-  margin: 5px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  width: 200px;
-}
-button[type="submit"] {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  margin: 5px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-button[type="button"] {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  margin: 5px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-button[type="submit"]:hover {
-  background-color: #218838;
-}
-button[type="button"]:hover {
-  background-color: #5a6268;
-}
-</style>
